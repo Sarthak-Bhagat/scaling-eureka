@@ -32,16 +32,18 @@ async function clickConnectButtons() {
     for (const button of connectButtons) {
         if (button.textContent.trim() === 'Connect') {
             // Random delay between 5-10 seconds
-            const delay = Math.floor(Math.random() * (10000 - 5000 + 1) + 5000);
+            const delay = Math.floor(Math.random() * (100) + 500);
             await new Promise(resolve => setTimeout(resolve, delay));
 
             button.click();
             clickCount++;
 
+            // Send progress update back to popup.js after each button click
+            chrome.runtime.sendMessage({status: `Clicked ${clickCount} connect button(s)`});
+
             try {
                 // Wait for the "Send" button in the modal and click it
                 const sendWithoutNote = await waitForElement('button[aria-label^="Send "]');
-                console.log(sendWithoutNote);
                 sendWithoutNote.click();
             } catch (error) {
                 console.log('Send button not found, moving to next connection');
@@ -56,7 +58,7 @@ async function clickConnectButtons() {
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.action === "clickConnectButtons") {
         clickConnectButtons().then(clickCount => {
-            sendResponse({status: `Clicked ${clickCount} connect buttons`});
+            sendResponse({status: `Finished clicking ${clickCount} connect buttons`});
         });
         return true; // Indicates we wish to send a response asynchronously
     }
