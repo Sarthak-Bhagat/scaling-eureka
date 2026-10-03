@@ -1,5 +1,8 @@
 # scaling-eureka
 
+A Chrome extension on manifest v3 that runs a content script on LinkedIn.
+Its manifest calls it "Professional Network Enhancer".
+
 ## Terms
 
 Mine, and free to use — MIT licensed, so do what you like with it.
